@@ -5,18 +5,18 @@ class Node {
     this.right = null;
   }
 }
-class DepthFirstSearch {
+
+class BreathFirstSearch {
   constructor() {
     this.root = null;
   }
 
-  // insert node
   insert(value) {
     const newNode = new Node(value);
     if (this.isEmpty()) {
       this.root = newNode;
     } else {
-      this.insertNode(this.root, newNode);
+      return this.insertNode(this.root, newNode);
     }
   }
 
@@ -25,13 +25,13 @@ class DepthFirstSearch {
       if (root.left === null) {
         root.left = newNode;
       } else {
-        this.insertNode(root.left, newNode);
+        return this.insertNode(root.left, newNode);
       }
     } else {
       if (root.right === null) {
         root.right = newNode;
       } else {
-        this.insertNode(root.right, newNode);
+        return this.insertNode(root.right, newNode);
       }
     }
   }
@@ -42,7 +42,7 @@ class DepthFirstSearch {
     } else {
       if (root.value === value) {
         return true;
-      } else if (root.value > value) {
+      } else if (value < root.value) {
         return this.search(root.left, value);
       } else {
         return this.search(root.right, value);
@@ -50,27 +50,8 @@ class DepthFirstSearch {
     }
   }
 
-  min(root) {
-    if (!root.left) {
-      return root.value;
-    } else {
-      return this.min(root.left);
-    }
-  }
-  max(root) {
-    if (!root.right) {
-      return root.value;
-    } else {
-      return this.min(root.right);
-    }
-  }
-
   delete(value) {
-    if (this.isEmpty()) {
-      return null;
-    } else {
-      this.root = this.deleteNode(this.root, value);
-    }
+    this.root = this.deleteNode(this.root, value);
   }
 
   deleteNode(root, value) {
@@ -82,24 +63,20 @@ class DepthFirstSearch {
     } else if (value > root.value) {
       root.right = this.deleteNode(root.right, value);
     } else {
+      //remove leaf
       if (!root.left && !root.right) {
         return null;
-      } else if (root.left === null) {
+      } else if (!root.left) {
         return root.right;
-      } else if (root.right === null) {
+      } else if (!root.right) {
         return root.left;
       }
-
       root.value = this.min(root.right);
       root.right = this.deleteNode(root.right, root.value);
     }
-    return null;
   }
 
   levelOrder() {
-    /** Use the optimised queue enqueue and dequeue from queue-object.js instead.
-     * I've used an array for simplicity. */
-
     let queue = {};
     let front = 0;
     let rear = 0;
@@ -128,46 +105,33 @@ class DepthFirstSearch {
     }
   }
 
-  preOrder(root) {
-    if (root) {
-      console.log(root.value);
-      this.preOrder(root.left);
-      this.preOrder(root.right);
-    }
-  }
-  inOrder(root) {
-    if (root) {
-      this.inOrder(root.left);
-      console.log(root.value);
-      this.inOrder(root.right);
-    }
-  }
-  postOrder(root) {
-    if (root) {
-      this.postOrder(root.left);
-      this.postOrder(root.right);
-      console.log(root.value);
+  min(root) {
+    if (!root.left) {
+      return root.value;
+    } else {
+      return this.min(root.left);
     }
   }
 
+  max(root) {
+    if (!root.right) {
+      return root.value;
+    } else {
+      return this.max(root.right);
+    }
+  }
   isEmpty() {
     return this.root === null;
   }
 }
-const dfsList = new DepthFirstSearch();
-dfsList.insert(10);
-dfsList.insert(5);
-dfsList.insert(15);
-dfsList.insert(3);
-dfsList.insert(7);
-// console.log(dfsList);
-// dfsList.preOrder(dfsList.root);
-// console.log(" ");
-// dfsList.inOrder(dfsList.root);
-// console.log(" ");
-// dfsList.postOrder(dfsList.root);
-// console.log(" ");
-// console.log(dfsList.search(dfsList.root, 4));
-dfsList.levelOrder();
-// dfsList.delete(5);
-// dfsList.printLevel(dfsList.root, 3);
+
+const bfsf = new BreathFirstSearch();
+
+bfsf.insert(10);
+bfsf.insert(5);
+bfsf.insert(15);
+
+console.log(bfsf);
+console.log(bfsf.search(bfsf.root, 5));
+bfsf.levelOrder();
+console.log(bfsf.min(bfsf.root));

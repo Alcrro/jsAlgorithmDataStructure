@@ -33,21 +33,6 @@ class Bfs {
     }
   }
 
-  levelOrder() {
-    const queue = {};
-    queue.root = this.root;
-    while (queue.length) {
-      let curr = queue.root;
-      queue.root = null;
-      console.log(curr.value);
-    }
-    if (curr.left) {
-      queue.root = queue.root.left;
-    }
-    if (curr.right) {
-      queue.root = queue.root.right;
-    }
-  }
   isEmpty() {
     return this.root === null;
   }
